@@ -72,7 +72,15 @@ function displaySubsetSeriesInformation(subsetSeries, language){
     }
 }
 
-function displaySubsetVersion(subsetVersion, language) {
+function displaySubsetVersion(subsetVersionsArray, language) {
+    if (Array !== subsetVersionsArray.type){
+        alert("subsetVersionsArray was not an Array! Aborting")
+        return;
+    }
+
+    let subsetVersion = subsetVersionsArray[0];
+    //TODO: Get the latest published version, no matter the order the versions are returned in?
+
     let validrangeElement, codeslistElement, currverinfoElement, versionslistElement;
 
     validrangeElement = document.getElementById("subset-validity-range");
@@ -155,4 +163,4 @@ function loadSubsetWebView(){
     }
 }
 
-loadSubsetWebView();
+//loadSubsetWebView();
