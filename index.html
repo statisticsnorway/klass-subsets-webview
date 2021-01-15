@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="./stylesheets/tabs.css" rel="stylesheet">
+    <title>Subsets Web View</title>
+</head>
+<body>
+    <!-- Subset series information -->
+    <h1 id="subset-name">Subset name</h1>
+    <p id="subset-description">Subset description</p>
+    <h3 id="statistical-unit">Statistical unit(s): Region</h3>
+    <h5 id="subset-validity-range">current version valid from YYYY-MM-DD to YYYY-MM-DD</h5>
+
+    <!-- Tab buttons -->
+    <div class="tab">
+        <button class="tablinks" id="defaultTab" onclick="openTab(event, 'tab-codes')">Codes</button>
+        <button class="tablinks" onclick="openTab(event, 'tab-current-version')">Current Version</button>
+        <button class="tablinks" onclick="openTab(event, 'tab-other-versions')">Other Versions</button>
+    </div>
+
+    <!-- Tabs -->
+    <div id="tab-codes" class="tabcontent">
+        <h3>Codes</h3>
+        <ul id="codes-list">
+            <li>#rank : code - name (expandable to show note)</li>
+            <li>#rank : code - name (expandable to show note)</li>
+        </ul>
+    </div>
+
+    <div id="tab-current-version" class="tabcontent">
+        <h3>Current Version</h3>
+        <div id="current-version-info">
+            <h5>(Information about current or last published valid version)</h5>
+            <p>Version rationale</p>
+            <p>created date</p>
+            <p>last modified</p>
+            <p>valid from</p>
+            <p>valid until</p>
+            <p>statistical units</p>
+        </div>
+    </div>
+
+    <div id="tab-other-versions" class="tabcontent">
+        <h3>Other Versions</h3>
+        <ul id="versions-list">
+            <li>version1 : from 2003-01-01 to 2010-01-01</li>
+            <li>version2 : from 2010-01-01 to 2021-01-01</li>
+            <li>version2 : from 2021-01-01 </li>
+        </ul>
+    </div>
+    <!-- End tabs -->
+
+    <script src="scripts/tabs.js"></script>
+</body>
+</html>
