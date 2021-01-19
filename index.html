@@ -9,10 +9,10 @@
 </head>
 <body>
     <!-- Subset series information -->
-    <h1 id="subset-name">Subset name</h1>
-    <p id="subset-description">Subset description</p>
-    <h3 id="statistical-unit">Statistical unit(s): Region</h3>
-    <h5 id="subset-validity-range">current version valid from YYYY-MM-DD to YYYY-MM-DD</h5>
+    <h1 id="subset-name">Subset name: </h1>
+    <p id="subset-description">Subset description: </p>
+    <h3 id="statistical-unit">Statistical unit(s): </h3>
+    <h5 id="subset-validity-range">Current version valid from YYYY-MM-DD to YYYY-MM-DD</h5>
 
     <!-- Tab buttons -->
     <div class="tab">
@@ -24,22 +24,18 @@
     <!-- Tabs -->
     <div id="tab-codes" class="tabcontent">
         <h3>Codes</h3>
-        <ul id="codes-list">
-            <li>#rank : code - name (expandable to show note)</li>
-            <li>#rank : code - name (expandable to show note)</li>
-        </ul>
+        <ul id="codes-list"></ul>
     </div>
 
     <div id="tab-current-version" class="tabcontent">
         <h3>Current Version</h3>
         <div id="current-version-info">
             <h5>(Information about current or last published valid version)</h5>
-            <p>Version rationale</p>
-            <p>created date</p>
-            <p>last modified</p>
-            <p>valid from</p>
-            <p>valid until</p>
-            <p>statistical units</p>
+            <p id="current-rationale">Version rationale: </p>
+            <p id="current-created-date">Created date: </p>
+            <p id="current-last-modified">Last modified: </p>
+            <p id="current-valid-from">Valid from: </p>
+            <p id="current-valid-until">Valid until: </p>
         </div>
     </div>
 
@@ -54,5 +50,6 @@
     <!-- End tabs -->
 
     <script src="scripts/tabs.js"></script>
+    <script src="scripts/loadSubset.js"></script>
 </body>
 </html>
