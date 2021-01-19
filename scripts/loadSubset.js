@@ -98,7 +98,10 @@ function displaySubsetSeriesInformation(subsetSeries, language, baseURL){
                     if ((typeof validUntil) === "string" && validUntil !== "")
                         versionInfoString += ` until ${validUntil}`
                     let versionLI = document.createElement("LI");
-                    versionLI.appendChild(document.createTextNode(versionInfoString));
+                    let versionA = document.createElement("A");
+                    versionA.setAttribute("href", versionURL);
+                    versionA.appendChild(document.createTextNode(versionInfoString))
+                    versionLI.appendChild(versionA);
                     versionslistElement.appendChild(versionLI);
                 } else if (this.response == null && this.status === 0) {
                     console.log("The computer appears to be offline.");
