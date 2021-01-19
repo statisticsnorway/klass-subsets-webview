@@ -147,6 +147,7 @@ function displaySubsetVersion(subsetVersionsArray, language) {
     codeslistValue = subsetVersion["codes"];
     console.log("codes list : "+JSON.stringify(codeslistValue));
 
+    codeslistElement.innerText = "";
     // Insert values from subset object into relevant elements from html documents
     let code;
     for (code of codeslistValue) {
@@ -170,7 +171,7 @@ function displaySubsetVersion(subsetVersionsArray, language) {
 
         let codeLI = document.createElement("LI");
         let codeInfoDIV = document.createElement("DIV");
-        let textnode = document.createTextNode(`#${code["rank"]} : ${code["code"]} - ${codeName}`);
+        let textnode = document.createTextNode(`Rank #${code["rank"]} : ${code["code"]} - ${codeName}`);
         codeInfoDIV.appendChild(textnode);
         let noteContDIV = document.createElement("DIV");
         let p = document.createElement("P");
