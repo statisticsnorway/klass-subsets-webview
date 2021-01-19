@@ -229,17 +229,21 @@ function loadSubsetWebView(){
                         console.log("language was not specified by means of URL parameter");
                         // Find the default language for this subset, or default to 'nb' if that fails
                         let admindetails = subsetSeries.administrativeDetails;
-                        let admindetail;
-                        for (admindetail of admindetails) {
-                            if ((typeof admindetail.administrativeDetailType) === "string" && "DEFAULTLANGUAGE" === admindetail.administrativeDetailType) {
-                                defaultlanguage = admindetail["values"][0];
-                                if(!languageCodesArray.includes(defaultlanguage)) {
-                                    alert("The default language retrieved from the administrativeDetails was "+defaultlanguage+", which is not one of the acceptable values. Setting defaultLanguage to 'nb'");
-                                    defaultlanguage = "nb";
+                        if ((typeof admindetails) === "array") {
+                            let admindetail;
+                            for (admindetail of admindetails) {
+                                if ((typeof admindetail.administrativeDetailType) === "string" && "DEFAULTLANGUAGE" === admindetail.administrativeDetailType) {
+                                    defaultlanguage = admindetail["values"][0];
+                                    if(!languageCodesArray.includes(defaultlanguage)) {
+                                        alert("The default language retrieved from the administrativeDetails was "+defaultlanguage+", which is not one of the acceptable values. Setting defaultLanguage to 'nb'");
+                                        defaultlanguage = "nb";
+                                    }
+                                    language = defaultlanguage;
+                                    break;
                                 }
-                                language = defaultlanguage;
-                                break;
                             }
+                        } else {
+                            language = "nb";
                         }
                     }
                     console.log("language was finally set to '"+language+"'")
