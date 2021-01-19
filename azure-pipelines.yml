@@ -1,0 +1,35 @@
+name: $(Build.SourceBranch)-$(date:yyyyMMdd)$(rev:.r)
+
+trigger:
+  branches:
+    include:
+      - 'master'
+
+pool:
+  vmImage: 'ubuntu-latest'
+
+variables:
+  - group: Hemmeligheter
+  - name: fullSha
+    value: '$(Build.SourceVersion)'
+  - name: imageName
+    value: 'eu.gcr.io/prod-bip/ssb/klass/subsets-webview'
+  - name: repoName
+    value: 'prod-bip/ssb/klass/subsets-webview'
+
+resources:
+  repositories:
+    - repository: templates
+      type: github
+      name: statisticsnorway/azure-pipelines-templates
+      ref: refs/tags/1.1.10
+      endpoint: statisticsnorway
+
+jobs:
+  - job: buildTestAndRunTest
+    displayName: 'Test/build app and Dockerimage'
+    steps:
+      - template: 'docker/docker-build-image-and-push-to-gcr.yml@templates'
+        parameters:
+          imageName: $(imageName)
+          repoName: $(repoName)
