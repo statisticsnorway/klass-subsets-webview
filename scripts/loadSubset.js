@@ -173,15 +173,18 @@ function displaySubsetVersion(subsetVersionsArray, language) {
         console.log("codeNote in language '"+language+"': "+codeNote)
 
         let codeLI = document.createElement("LI");
-        let codeInfoDIV = document.createElement("DIV");
-        let textnode = document.createTextNode(`Rank #${code["rank"]} : ${code["code"]} - ${codeName}`);
-        codeInfoDIV.appendChild(textnode);
-        let noteContDIV = document.createElement("DIV");
-        let p = document.createElement("P");
-        p.appendChild(document.createTextNode(codeNote));
-        noteContDIV.appendChild(p);
-        codeLI.appendChild(codeInfoDIV);
-        codeLI.appendChild(noteContDIV);
+        let codeInfoSpan = document.createElement("SPAN");
+        let textnode = document.createTextNode(`Rank: #${code["rank"]} - Code: ${code["code"]} - Name: '${codeName}' `);
+        codeInfoSpan.appendChild(textnode);
+        let noteContSpan = document.createElement("SPAN");
+        //let p = document.createElement("P");
+        //p.appendChild(document.createTextNode(`Note: ${codeNote}`));
+        //noteContDIV.appendChild(p);
+        if (codeNote.length === 0)
+            codeNote = 'EMPTY';
+        noteContSpan.appendChild(document.createTextNode(`- Note: '${codeNote}'`));
+        codeLI.appendChild(codeInfoSpan);
+        codeLI.appendChild(noteContSpan);
         console.log("codeLI: "+codeLI.toString());
         codeslistElement.appendChild(codeLI);
     }
