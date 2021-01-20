@@ -174,8 +174,8 @@ function displaySubsetVersion(subsetVersionsArray, language) {
 
         let codeLI = document.createElement("LI");
         let codeInfoSpan = document.createElement("SPAN");
-        let textnode = document.createTextNode(`Rank: #${code["rank"]} - Code: ${code["code"]} - Name: '${codeName}' `);
-        codeInfoSpan.appendChild(textnode);
+        let textNode = document.createTextNode(`Code: ${code["code"]} - Name: '${codeName}' `);
+        codeInfoSpan.appendChild(textNode);
         let noteContSpan = document.createElement("SPAN");
         //let p = document.createElement("P");
         //p.appendChild(document.createTextNode(`Note: ${codeNote}`));
