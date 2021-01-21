@@ -107,9 +107,9 @@ function displaySubsetVersion(subsetVersionsArray, language) {
 
     validFrom = subsetVersion["validFrom"];
     validUntil = subsetVersion["validUntil"];
-    let validFromUntilString = "Current/latest version valid from "+validFrom;
+    let validFromUntilString = "Siste versjon, gyldig fra og med "+validFrom;
     if (validUntil != null && validUntil != undefined && (typeof validUntil) == "string")
-        validFromUntilString += " until "+validUntil;
+        validFromUntilString += " til "+validUntil;
     validrangeElement.innerText = validFromUntilString;
 
     codeslistValue = subsetVersion["codes"];
@@ -146,11 +146,11 @@ function displaySubsetVersion(subsetVersionsArray, language) {
             let noteContSpan = document.createElement("SPAN");
             noteContSpan.className = "hidden";
             noteContSpan.id = `note-code-${code["code"]}`;
-            noteContSpan.appendChild(document.createTextNode(`- Note: '${codeNote}'`));
+            noteContSpan.appendChild(document.createTextNode(`- Kommentar: '${codeNote}'`));
             let showNoteButton = document.createElement("BUTTON");
             showNoteButton.className = "show-note";
             showNoteButton.id = `show-note-${code["code"]}`;
-            showNoteButton.innerText = "Show/Hide Note";
+            showNoteButton.innerText = "Vis kommentar";
             showNoteButton.onclick = function(){toggleHide(noteContSpan.id.toString())};
             codeLI.appendChild(showNoteButton);
             codeLI.appendChild(noteContSpan);
@@ -187,10 +187,10 @@ function displaySubsetVersionsList(responseVersionsArray, versionsURL) {
         let versionId = responseVersion["versionId"];
         let validFrom = responseVersion["validFrom"];
         let validUntil = responseVersion["validUntil"];
-        let versionInfoString = `Valid from ${validFrom}`
+        let versionInfoString = `Gyldig fra og med ${validFrom}`
         if ((typeof validUntil) === "string" && validUntil !== "")
-            versionInfoString += ` until ${validUntil}`
-        versionInfoString += ` (Version ID:'${versionId}')`;
+            versionInfoString += ` til ${validUntil}`
+        versionInfoString += ` (Versjons-ID: '${versionId}')`;
         let versionLI = document.createElement("LI");
         let versionA = document.createElement("A");
         versionA.setAttribute("href", `${versionsURL}/${versionId}`);
@@ -204,9 +204,9 @@ function loadSubsetWebView() {
     const defaultSubsetIdValue = "Empty";
     let subsetId = getUrlParam("subsetId", defaultSubsetIdValue);
     console.log("subsetId: "+subsetId);
-    let cluster = getUrlParam("cluster", "prod");
+    let cluster = getUrlParam("cluster", "staging");
     console.log("cluster: "+cluster);
-    let language = getUrlParam("language", "");
+    let language = getUrlParam("language", "nb");
     console.log("language: "+language);
     let baseURL = `https://subsets-api.${cluster}-bip-app.ssb.no`
     let subsetByIdURL = baseURL+`/v2/subsets/${subsetId}`

@@ -9,41 +9,40 @@
 </head>
 <body>
     <!-- Subset series information -->
-    <h1 id="subset-name">Subset name: </h1>
-    <p id="subset-description">Subset description: </p>
-    <h3 id="statistical-unit">Statistical unit(s): </h3>
-    <h5 id="subset-validity-range">Current/latest version valid from YYYY-MM-DD to YYYY-MM-DD</h5>
+    <h1 id="subset-name">Navn: </h1>
+    <p id="subset-description">Beskrivelse: </p>
+    <h3 id="statistical-unit">Statistiske enheter: </h3>
+    <h5 id="subset-validity-range">Siste versjon, gyldig fra og med YYYY-MM-DD til YYYY-MM-DD</h5>
 
     <!-- Tab buttons -->
     <div class="tab">
-        <button class="tablinks" id="defaultTab" onclick="openTab(event, 'tab-codes')">Codes</button>
-        <button class="tablinks" onclick="openTab(event, 'tab-current-version')">Current Version</button>
-        <button class="tablinks" onclick="openTab(event, 'tab-other-versions')">Other Versions</button>
+        <button class="tablinks" id="defaultTab" onclick="openTab(event, 'tab-codes')">Koder</button>
+        <button class="tablinks" onclick="openTab(event, 'tab-current-version')">Metadata siste versjon</button>
+        <button class="tablinks" onclick="openTab(event, 'tab-other-versions')">Alle versjoner</button>
     </div>
 
     <!-- Tabs -->
     <div id="tab-codes" class="tabcontent">
-        <h3>Codes of current/latest published version</h3>
-        <ul id="codes-list">Loading codes . . .</ul>
+        <h3>Koder i siste publiserte versjon</h3>
+        <ul id="codes-list">Laster inn koder . . .</ul>
     </div>
 
     <div id="tab-current-version" class="tabcontent">
-        <h3>Metadata of current/latest published version</h3>
+        <h3>Metadata for siste publiserte versjon</h3>
         <div id="current-version-info">
-            <p id="current-rationale">Version rationale: </p>
-            <p id="current-created-date">Created date: </p>
-            <p id="current-last-modified">Last modified: </p>
-            <p id="current-valid-from">Valid from: </p>
-            <p id="current-valid-until">Valid until: </p>
+            <p id="current-rationale">Versjonsrasjonale: </p>
+            <p id="current-created-date">Oprettelsesdato: </p>
+            <p id="current-last-modified">Sist modifisert: </p>
+            <p id="current-valid-from">Gyldig fra og med: </p>
+            <p id="current-valid-until">Gyldig til: </p>
         </div>
     </div>
 
     <div id="tab-other-versions" class="tabcontent">
-        <h3>All Versions</h3>
+        <h3>Alle versjoner</h3>
         <ul id="versions-list">
             <li>version1 : from 2003-01-01 to 2010-01-01</li>
             <li>version2 : from 2010-01-01 to 2021-01-01</li>
-            <li>version2 : from 2021-01-01 </li>
         </ul>
     </div>
     <!-- End tabs -->
