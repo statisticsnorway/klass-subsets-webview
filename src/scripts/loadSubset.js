@@ -90,9 +90,8 @@ function displaySubsetVersion(subsetVersionsArray, language) {
     let subsetVersion = subsetVersionsArray[0];
     //TODO: Get the latest published version, no matter the order the versions are returned in?
 
-    let validrangeElement, codeslistElement, currverinfoElement, currentVersionRationaleElement, currentCreatedDateElement, currentLastModifiedElement, currentValidFromElement, currentValidUntilElement;
+    let codeslistElement, currverinfoElement, currentVersionRationaleElement, currentCreatedDateElement, currentLastModifiedElement, currentValidFromElement, currentValidUntilElement;
 
-    validrangeElement = document.getElementById("subset-validity-range");
     codeslistElement = document.getElementById("codes-list");
     currverinfoElement = document.getElementById("current-version-info");
     currentVersionRationaleElement = document.getElementById("current-rationale");
@@ -107,10 +106,6 @@ function displaySubsetVersion(subsetVersionsArray, language) {
 
     validFrom = subsetVersion["validFrom"];
     validUntil = subsetVersion["validUntil"];
-    let validFromUntilString = "Siste versjon, gyldig fra og med "+validFrom;
-    if (validUntil != null && validUntil != undefined && (typeof validUntil) == "string")
-        validFromUntilString += " til "+validUntil;
-    validrangeElement.innerText = validFromUntilString;
 
     codeslistValue = subsetVersion["codes"];
     console.log("codes list : "+JSON.stringify(codeslistValue));
