@@ -141,11 +141,11 @@ function displaySubsetVersion(subsetVersionsArray, language) {
             let noteContSpan = document.createElement("SPAN");
             noteContSpan.className = "hidden";
             noteContSpan.id = `note-code-${code["code"]}`;
-            noteContSpan.appendChild(document.createTextNode(`- Kommentar: '${codeNote}'`));
+            noteContSpan.appendChild(document.createTextNode(`- ${globalTextObject.comment[language]}: '${codeNote}'`));
             let showNoteButton = document.createElement("BUTTON");
             showNoteButton.className = "show-note";
             showNoteButton.id = `show-note-${code["code"]}`;
-            showNoteButton.innerText = "Vis kommentar";
+            showNoteButton.innerText = globalTextObject["show-note"][language];
             showNoteButton.onclick = function(){toggleHide(noteContSpan.id.toString())};
             codeLI.appendChild(showNoteButton);
             codeLI.appendChild(noteContSpan);
@@ -174,7 +174,7 @@ function displaySubsetVersion(subsetVersionsArray, language) {
     currentValidUntilElement.appendChild(document.createTextNode(validUntil));
 }
 
-function displaySubsetVersionsList(responseVersionsArray, versionsURL) {
+function displaySubsetVersionsList(responseVersionsArray, versionsURL, language) {
     let versionslistElement = document.getElementById("versions-list");
     versionslistElement.innerText = "";
     let responseVersion;
@@ -182,10 +182,10 @@ function displaySubsetVersionsList(responseVersionsArray, versionsURL) {
         let versionId = responseVersion["versionId"];
         let validFrom = responseVersion["validFrom"];
         let validUntil = responseVersion["validUntil"];
-        let versionInfoString = `Gyldig fra og med ${validFrom}`
+        let versionInfoString = globalTextObject["current-valid-from"][language]+validFrom
         if ((typeof validUntil) === "string" && validUntil !== "")
-            versionInfoString += ` til ${validUntil}`
-        versionInfoString += ` (Versjons-ID: '${versionId}')`;
+            versionInfoString += globalTextObject["current-valid-until"][language]+validUntil
+        versionInfoString += ` (Version-ID: '${versionId}')`;
         let versionLI = document.createElement("LI");
         let versionA = document.createElement("A");
         versionA.setAttribute("href", `${versionsURL}/${versionId}`);
@@ -206,6 +206,15 @@ function loadSubsetWebView() {
     let baseURL = `https://subsets-api.${cluster}-bip-app.ssb.no`
     let subsetByIdURL = baseURL+`/v2/subsets/${subsetId}`
     console.log("subsetByIdURL: "+subsetByIdURL)
+
+    //TODO: Update language of HTML elements based on input language
+    let htmlId;
+    for (htmlId in multilingualElementContent) {
+        let translatedTextValue = multilingualElementContent[htmlId][language]
+        console.log(`Updating innerText of element with id '${htmlId}' to value '${translatedTextValue}'`)
+        document.getElementById(htmlId).innerHTML = '';
+        document.getElementById(htmlId).appendChild(document.createTextNode(translatedTextValue));
+    }
 
     let subsetSeries;
     if (subsetId !== defaultSubsetIdValue) {
@@ -260,7 +269,7 @@ function loadSubsetWebView() {
                     responseVersionsArray = JSON.parse(this.responseText);
                     responseVersionsArray.sort((e1, e2) => e2["validFrom"].localeCompare(e1["validFrom"]));
                     displaySubsetVersion(responseVersionsArray, language);
-                    displaySubsetVersionsList(responseVersionsArray, versionsUrl);
+                    displaySubsetVersionsList(responseVersionsArray, versionsUrl, language);
                 } else if (this.response == null && this.status === 0) {
                     console.log("The computer appears to be offline.");
                 }

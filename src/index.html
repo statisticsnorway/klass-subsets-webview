@@ -15,19 +15,19 @@
 
     <!-- Tab buttons -->
     <div class="tab">
-        <button class="tablinks" id="defaultTab" onclick="openTab(event, 'tab-codes')">Koder</button>
-        <button class="tablinks" onclick="openTab(event, 'tab-current-version')">Metadata siste versjon</button>
-        <button class="tablinks" onclick="openTab(event, 'tab-other-versions')">Alle versjoner</button>
+        <button class="tablinks defaultTab" id="button-tab-codes" onclick="openTab(event, 'tab-codes')">Koder</button>
+        <button class="tablinks" id="button-tab-current-version" onclick="openTab(event, 'tab-current-version')">Metadata siste versjon</button>
+        <button class="tablinks" id="button-tab-other-versions" onclick="openTab(event, 'tab-other-versions')">Alle versjoner</button>
     </div>
 
     <!-- Tabs -->
     <div id="tab-codes" class="tabcontent">
-        <h3>Koder i siste publiserte versjon</h3>
+        <h3 id="tab-codes-header">Koder i siste publiserte versjon</h3>
         <ul id="codes-list">Laster inn koder . . .</ul>
     </div>
 
     <div id="tab-current-version" class="tabcontent">
-        <h3>Metadata for siste publiserte versjon</h3>
+        <h3 id="tab-current-version-header">Metadata for siste publiserte versjon</h3>
         <div id="current-version-info">
             <p id="current-rationale">Versjonsrasjonale: </p>
             <p id="current-created-date">Oprettelsesdato: </p>
@@ -38,7 +38,7 @@
     </div>
 
     <div id="tab-other-versions" class="tabcontent">
-        <h3>Alle versjoner</h3>
+        <h3 id="tab-other-versions-header">Alle versjoner</h3>
         <ul id="versions-list">
             <li>version1 : from 2003-01-01 to 2010-01-01</li>
             <li>version2 : from 2010-01-01 to 2021-01-01</li>
@@ -46,6 +46,7 @@
     </div>
     <!-- End tabs -->
 
+    <script src="./scripts/text.js"></script>
     <script src="./scripts/tabs.js"></script>
     <script src="./scripts/loadSubset.js"></script>
 </body>
