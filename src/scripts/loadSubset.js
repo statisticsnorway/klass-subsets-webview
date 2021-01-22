@@ -182,9 +182,9 @@ function displaySubsetVersionsList(responseVersionsArray, versionsURL, language)
         let versionId = responseVersion["versionId"];
         let validFrom = responseVersion["validFrom"];
         let validUntil = responseVersion["validUntil"];
-        let versionInfoString = globalTextObject["current-valid-from"][language]+validFrom
+        let versionInfoString = multilingualElementContent["current-valid-from"][language]+validFrom
         if ((typeof validUntil) === "string" && validUntil !== "")
-            versionInfoString += globalTextObject["current-valid-until"][language]+validUntil
+            versionInfoString += multilingualElementContent["current-valid-until"][language]+validUntil
         versionInfoString += ` (Version-ID: '${versionId}')`;
         let versionLI = document.createElement("LI");
         let versionA = document.createElement("A");
@@ -222,10 +222,9 @@ function loadSubsetWebView() {
         seriesRequest.onreadystatechange = function () {
             if (this.readyState === 4) {
                 if (this.status === 200) {
-                    console.log("GET series 200 OK . . .")
+                    console.log("GET series 200 OK . . .");
                     subsetSeries = JSON.parse(this.responseText);
-                    console.log("subserSeries responseText: "+this.responseText)
-                    const languageCodesArray = ["nb", "nn", "en"];
+                    console.log("subserSeries responseText: "+this.responseText);
                     let defaultlanguage;
                     if (language == null || "string" !==  (typeof language) || "" === language || !languageCodesArray.includes(language)) {
                         console.log("language was not specified by means of URL parameter");
@@ -248,6 +247,18 @@ function loadSubsetWebView() {
                             language = "nb";
                         }
                     }
+                    let languagePresent = false;
+                    let mlt;
+                    for (mlt of subsetSeries["name"]) {
+                        if (mlt["languageCode"] === language) {
+                            languagePresent = true;
+                            console.log(`Language ${language} was present in 'name' field`);
+                            break;
+                        }
+                    }
+                    let firstNameLanguageCode = subsetSeries["name"][0]["languageCode"];
+                    if (!languagePresent && (typeof firstNameLanguageCode) === "string" && languageCodesArray.includes(firstNameLanguageCode))
+                        language = firstNameLanguageCode;
                     console.log("language was finally set to '"+language+"'")
                     displaySubsetSeriesInformation(subsetSeries, language, baseURL);
                 } else if (this.response == null && this.status === 0) {
