@@ -26,9 +26,9 @@ function getUrlParam(parameter, defaultValue) {
     let urlParameter = defaultValue;
     console.log("urlParameter '"+parameter+"': was set to defaultValue: '"+defaultValue+"' ")
     if(window.location.href.indexOf(parameter) > -1) {
-        console.log("Index of parameter "+parameter+" in window.location.href was "+window.location.href.indexOf(parameter));
+        console.log("Index of parameter '"+parameter+"' in window.location.href was "+window.location.href.indexOf(parameter));
         urlParameter = getUrlVars()[parameter];
-        console.log("urlParameter was set to '"+urlParameter+"'")
+        console.log("urlParameter '"+parameter+"' was set to '"+urlParameter+"'")
         if (urlParameter === undefined) {
             console.log("was undefined")
         }
@@ -36,51 +36,60 @@ function getUrlParam(parameter, defaultValue) {
     return urlParameter;
 }
 
-function displaySubsetSeriesInformation(subsetSeries, language, baseURL){
+function getLanguageText(multilingualTextArray, languageCode) {
+    let multilingualTextObject;
+    for (multilingualTextObject of multilingualTextArray) {
+        if (languageCode === multilingualTextObject["languageCode"])
+            return multilingualTextObject["languageText"];
+    }
+    return "";
+}
+
+function getLanguageTextOrDefault(multilingualTextArray, languageCode, defaultLanguageCode){
+    let text = getLanguageText(multilingualTextArray, languageCode);
+    if (text === "")
+        text = getLanguageText(multilingualTextArray, defaultLanguageCode);
+    if (text === "")
+        text = multilingualTextArray[0]["languageText"];
+    return text;
+}
+
+function displaySubsetSeriesInformation(subsetSeries, language, baseURL, defaultLanguage){
     // var obj = JSON.parse(text);
 
     // Get all relevant html document elements from DOM api
-    let subsetnameElement, subsetdescElement, statunitElement;
-    subsetnameElement = document.getElementById("subset-name");
-    subsetdescElement = document.getElementById("subset-description");
-    statunitElement = document.getElementById("statistical-unit");
+    let subsetNameElement, subsetDescElement, statUnitElement;
+    subsetNameElement = document.getElementById("subset-name");
+    subsetDescElement = document.getElementById("subset-description");
+    statUnitElement = document.getElementById("statistical-unit");
 
-    let subsetnameValue, subsetdescValue, statunitsValue;
+    let subsetNameValue, subsetDescValue, statUnitsValue;
 
     // Get all relevant values from 'subsetSeries' and 'subsetVersion' objects
 
     let nameMLTArray = subsetSeries["name"];
-    let multilingualTextObject;
-    subsetnameValue = "";
-    for (multilingualTextObject of nameMLTArray) {
-        if (language === multilingualTextObject["languageCode"])
-            subsetnameValue = multilingualTextObject["languageText"];
-    }
-    console.log("subsetnameValue: "+subsetnameValue);
-    subsetnameElement.innerText = '';
-    subsetnameElement.appendChild(document.createTextNode(subsetnameValue));
+    subsetNameValue = getLanguageTextOrDefault(nameMLTArray, language, defaultLanguage);
+    console.log("subsetNameValue: '"+subsetNameValue+"'");
+    subsetNameElement.innerText = '';
+    subsetNameElement.appendChild(document.createTextNode(subsetNameValue));
 
     let descMLTArray = subsetSeries["description"];
-    subsetdescValue = "";
-    for (multilingualTextObject of descMLTArray) {
-        if (language === multilingualTextObject["languageCode"])
-            subsetdescValue = multilingualTextObject["languageText"];
-    }
-    console.log("subsetdescValue: "+subsetdescValue);
-    subsetdescElement.innerText = '';
-    subsetdescElement.appendChild(document.createTextNode(subsetdescValue));
+    subsetDescValue = getLanguageTextOrDefault(descMLTArray, language, defaultLanguage);
+    console.log("subsetDescValue: "+subsetDescValue);
+    subsetDescElement.innerText = '';
+    subsetDescElement.appendChild(document.createTextNode(subsetDescValue));
 
     if (Array.isArray(subsetSeries["statisticalUnits"]))
-        statunitsValue = subsetSeries["statisticalUnits"].toString();
+        statUnitsValue = subsetSeries["statisticalUnits"].toString();
     else {
         alert("subsetSeries['statisticalUnits'] was not an array. The type was "+subsetSeries["statisticalUnits"]+". Setting to empty array.");
-        statunitsValue = [];
+        statUnitsValue = [];
     }
-    console.log("statunitsValue: "+statunitsValue);
-    statunitElement.appendChild(document.createTextNode(statunitsValue));
+    console.log("statUnitsValue: "+statUnitsValue);
+    statUnitElement.appendChild(document.createTextNode(statUnitsValue));
 }
 
-function displaySubsetVersion(subsetVersionsArray, language) {
+function displaySubsetVersion(subsetVersionsArray, language, defaultLanguage) {
     if (!Array.isArray(subsetVersionsArray)){
         alert("subsetVersionsArray was not an Array! Aborting")
         return;
@@ -114,21 +123,12 @@ function displaySubsetVersion(subsetVersionsArray, language) {
     // Insert values from subset object into relevant elements from html documents
     let code;
     for (code of codeslistValue) {
-        let codeName = "";
-        let nameMLTObject;
-        for (nameMLTObject of code["name"]) {
-            if (language === nameMLTObject["languageCode"])
-                codeName = nameMLTObject["languageText"];
-        }
+        let codeName = getLanguageTextOrDefault(code["name"], language, defaultLanguage);
         console.log("codeName in language '"+language+"': "+codeName)
 
         let codeNote = "";
-        let noteMLTObject;
         if (Array.isArray(code["notes"])) {
-            for (noteMLTObject of code["notes"]) {
-                if (language === noteMLTObject["languageCode"])
-                    codeNote = noteMLTObject["languageText"];
-            }
+            codeNote = getLanguageTextOrDefault(code["notes"], language, defaultLanguage);
         }
         console.log("codeNote in language '"+language+"': "+codeNote)
 
@@ -202,7 +202,7 @@ function loadSubsetWebView() {
     let cluster = getUrlParam("cluster", "staging");
     console.log("cluster: "+cluster);
     let language = getUrlParam("language", "nb");
-    console.log("language: "+language);
+    console.log("language: '"+language+"'");
     let baseURL = `https://subsets-api.${cluster}-bip-app.ssb.no`
     let subsetByIdURL = baseURL+`/v2/subsets/${subsetId}`
     console.log("subsetByIdURL: "+subsetByIdURL)
@@ -216,6 +216,7 @@ function loadSubsetWebView() {
         document.getElementById(htmlId).appendChild(document.createTextNode(translatedTextValue));
     }
 
+    let defaultLanguage = "nb";
     let subsetSeries;
     if (subsetId !== defaultSubsetIdValue) {
         let seriesRequest = new XMLHttpRequest();
@@ -224,43 +225,29 @@ function loadSubsetWebView() {
                 if (this.status === 200) {
                     console.log("GET series 200 OK . . .");
                     subsetSeries = JSON.parse(this.responseText);
-                    console.log("subserSeries responseText: "+this.responseText);
-                    let defaultlanguage;
-                    if (language == null || "string" !==  (typeof language) || "" === language || !languageCodesArray.includes(language)) {
-                        console.log("language was not specified by means of URL parameter");
-                        // Find the default language for this subset, or default to 'nb' if that fails
-                        let admindetails = subsetSeries.administrativeDetails;
-                        if ((typeof admindetails) === "array") {
-                            let admindetail;
-                            for (admindetail of admindetails) {
-                                if ((typeof admindetail.administrativeDetailType) === "string" && "DEFAULTLANGUAGE" === admindetail.administrativeDetailType) {
-                                    defaultlanguage = admindetail["values"][0];
-                                    if (!languageCodesArray.includes(defaultlanguage)) {
-                                        alert("The default language retrieved from the administrativeDetails was "+defaultlanguage+", which is not one of the acceptable values. Setting defaultLanguage to 'nb'");
-                                        defaultlanguage = "nb";
-                                    }
-                                    language = defaultlanguage;
-                                    break;
+                    console.log("subsetSeries responseText: "+this.responseText);
+
+                    if (language === null || "string" !==  (typeof language) || "" === language || !languageCodesArray.includes(language)) {
+                        console.log("language was not specified to a valid value by means of URL parameter");
+                    }
+
+                    let adminDetails = subsetSeries.administrativeDetails;
+                    if ((typeof adminDetails) === "array") {
+                        let adminDetail;
+                        for (adminDetail of adminDetails) {
+                            if ((typeof adminDetail.administrativeDetailType) === "string" && "DEFAULTLANGUAGE" === adminDetail.administrativeDetailType) {
+                                defaultLanguage = adminDetail["values"][0];
+                                if (!languageCodesArray.includes(defaultLanguage)) {
+                                    alert("The default language retrieved from the administrativeDetails was "+defaultLanguage+", which is not one of the acceptable values. Setting defaultLanguage to 'nb'");
+                                    defaultLanguage = "nb";
                                 }
+                                break;
                             }
-                        } else {
-                            language = "nb";
                         }
                     }
-                    let languagePresent = false;
-                    let mlt;
-                    for (mlt of subsetSeries["name"]) {
-                        if (mlt["languageCode"] === language) {
-                            languagePresent = true;
-                            console.log(`Language ${language} was present in 'name' field`);
-                            break;
-                        }
-                    }
-                    let firstNameLanguageCode = subsetSeries["name"][0]["languageCode"];
-                    if (!languagePresent && (typeof firstNameLanguageCode) === "string" && languageCodesArray.includes(firstNameLanguageCode))
-                        language = firstNameLanguageCode;
-                    console.log("language was finally set to '"+language+"'")
-                    displaySubsetSeriesInformation(subsetSeries, language, baseURL);
+                    console.log("Default language for subset series is '"+defaultLanguage+"'")
+
+                    displaySubsetSeriesInformation(subsetSeries, language, baseURL, defaultLanguage);
                 } else if (this.response == null && this.status === 0) {
                     console.log("The computer appears to be offline.");
                 }
@@ -279,7 +266,7 @@ function loadSubsetWebView() {
                     console.log("subsetVersion responseText: "+this.responseText);
                     responseVersionsArray = JSON.parse(this.responseText);
                     responseVersionsArray.sort((e1, e2) => e2["validFrom"].localeCompare(e1["validFrom"]));
-                    displaySubsetVersion(responseVersionsArray, language);
+                    displaySubsetVersion(responseVersionsArray, language, defaultLanguage);
                     displaySubsetVersionsList(responseVersionsArray, versionsUrl, language);
                 } else if (this.response == null && this.status === 0) {
                     console.log("The computer appears to be offline.");
