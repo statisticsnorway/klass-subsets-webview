@@ -49,7 +49,7 @@ function getLanguageTextOrDefault(multilingualTextArray, languageCode, defaultLa
     let text = getLanguageText(multilingualTextArray, languageCode);
     if (text === "")
         text = getLanguageText(multilingualTextArray, defaultLanguageCode);
-    if (text === "")
+    if (text === "" && multilingualTextArray.size > 0)
         text = multilingualTextArray[0]["languageText"];
     return text;
 }
