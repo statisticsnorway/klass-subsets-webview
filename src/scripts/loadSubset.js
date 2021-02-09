@@ -46,10 +46,11 @@ function getLanguageText(multilingualTextArray, languageCode) {
 }
 
 function getLanguageTextOrDefault(multilingualTextArray, languageCode, defaultLanguageCode){
+    console.log("getLanguageTextOrDefault(), mlta: "+JSON.stringify(multilingualTextArray))
     let text = getLanguageText(multilingualTextArray, languageCode);
     if (text === "")
         text = getLanguageText(multilingualTextArray, defaultLanguageCode);
-    if (text === "")
+    if (text === "" && multilingualTextArray.size > 0)
         text = multilingualTextArray[0]["languageText"];
     return text;
 }
