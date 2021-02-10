@@ -261,7 +261,7 @@ function loadSubsetWebView() {
         seriesRequest.send(null);
 
         let responseVersionsArray;
-        let versionsUrl = `https://subsets-api.${cluster}-bip-app.ssb.no/v2/subsets/${subsetId}/versions`
+        let versionsUrl = `https://subsets-api.${cluster}-bip-app.ssb.no/v2/subsets/${subsetId}/versions?includeDrafts=false`
         let versionsRequest = new XMLHttpRequest();
         versionsRequest.onreadystatechange = function () {
             if (this.readyState === 4) {
