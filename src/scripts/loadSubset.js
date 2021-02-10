@@ -82,8 +82,12 @@ function displaySubsetSeriesInformation(subsetSeries, language, baseURL, default
     if (Array.isArray(subsetSeries["statisticalUnits"]))
         statUnitsValue = subsetSeries["statisticalUnits"].toString();
     else {
-        alert("subsetSeries['statisticalUnits'] was not an array. The type was "+subsetSeries["statisticalUnits"]+". Setting to empty array.");
         statUnitsValue = [];
+        if (!subsetSeries.hasOwnProperty("statisticalUnits")) {
+            console.log("The subsetSeries has no 'statisticalUnits' field present");
+        } else {
+            console.log("subsetSeries['statisticalUnits'] was not an array. The type was "+subsetSeries["statisticalUnits"]+". Setting to empty array.");
+        }
     }
     console.log("statUnitsValue: "+statUnitsValue);
     statUnitElement.appendChild(document.createTextNode(statUnitsValue));
@@ -257,7 +261,7 @@ function loadSubsetWebView() {
         seriesRequest.send(null);
 
         let responseVersionsArray;
-        let versionsUrl = `https://subsets-api.${cluster}-bip-app.ssb.no/v2/subsets/${subsetId}/versions`
+        let versionsUrl = `https://subsets-api.${cluster}-bip-app.ssb.no/v2/subsets/${subsetId}/versions?includeDrafts=false`
         let versionsRequest = new XMLHttpRequest();
         versionsRequest.onreadystatechange = function () {
             if (this.readyState === 4) {
