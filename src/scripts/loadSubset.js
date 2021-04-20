@@ -126,6 +126,7 @@ function displaySubsetVersion(subsetVersionsArray, language, defaultLanguage) {
     codeslistElement.innerText = "";
     // Insert values from subset object into relevant elements from html documents
     let code;
+    let index = 0; // Used to enumerate list items, to give them an ID
     for (code of codeslistValue) {
         let codeName = getLanguageTextOrDefault(code["name"], language, defaultLanguage);
         console.log("codeName in language '"+language+"': "+codeName)
@@ -144,11 +145,11 @@ function displaySubsetVersion(subsetVersionsArray, language, defaultLanguage) {
         if (codeNote.length !== 0) {
             let noteContSpan = document.createElement("SPAN");
             noteContSpan.className = "hidden";
-            noteContSpan.id = `note-code-${code["code"]}`;
+            noteContSpan.id = `note-code-${index}`;
             noteContSpan.appendChild(document.createTextNode(`- ${globalTextObject.comment[language]}: '${codeNote}'`));
             let showNoteButton = document.createElement("BUTTON");
             showNoteButton.className = "show-note";
-            showNoteButton.id = `show-note-${code["code"]}`;
+            showNoteButton.id = `show-note-${index}`;
             showNoteButton.innerText = globalTextObject["show-note"][language];
             showNoteButton.onclick = function(){toggleHide(noteContSpan.id.toString())};
             codeLI.appendChild(showNoteButton);
@@ -156,6 +157,7 @@ function displaySubsetVersion(subsetVersionsArray, language, defaultLanguage) {
         }
         console.log("codeLI: "+codeLI.toString());
         codeslistElement.appendChild(codeLI);
+        index++;
     }
 
     let rationale = "";
