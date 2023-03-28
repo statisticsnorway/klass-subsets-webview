@@ -205,7 +205,10 @@ function loadSubsetWebView() {
     const defaultSubsetIdValue = "Empty";
     let subsetId = getUrlParam("subsetId", defaultSubsetIdValue);
     console.log("subsetId: "+subsetId);
-    let cluster = getUrlParam("cluster", "staging");
+    let cluster = "prod";
+    if ( window.location.href.includes("staging-bip-app") ) {
+        cluster = "staging";
+    }
     console.log("cluster: "+cluster);
     let language = getUrlParam("language", "nb");
     console.log("language: '"+language+"'");
