@@ -15,10 +15,14 @@ variables:
   - group: Hemmeligheter
   - name: fullSha
     value: '$(Build.SourceVersion)'
+  - name: baseImagePath
+    value: 'eu.gcr.io/'
   - name: imageName
-    value: 'eu.gcr.io/prod-bip/ssb/klass/subsets-webview'
-  - name: repoName
     value: 'prod-bip/ssb/klass/subsets-webview'
+  - name: snykServiceConnection
+    value: 'Klass-Snyk'
+  - name: snykOrganisation
+    value: 'klass'
 
 resources:
   repositories:
@@ -32,11 +36,12 @@ jobs:
   - job: buildTestAndRunTest
     displayName: 'Test/build app and Dockerimage'
     steps:
-      - template: 'docker/docker-build-image-and-push-to-gcr.yml@templates'
+      - template: 'docker/docker-build-snykscan-and-push-to-gcr.yaml@templates'
         parameters:
           imageName: $(imageName)
-          repoName: $(repoName)
+          snykServiceConnection: $(snykServiceConnection)
+          snykOrganisation: $(snykOrganisation)
   - template: 'docker/docker-tag-for-production.yml@templates'
     parameters:
       tagToTag: 'master-$(fullSha)'
-      gcrImageName: $(imageName)
+      gcrImageName: '$(baseImagePath)$(imageName)'
